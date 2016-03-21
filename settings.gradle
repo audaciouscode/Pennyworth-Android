@@ -1,2 +1,2 @@
 include ':PassiveDataKit'
-project(':PassiveDataKit').projectDir = new File(settingsDir, 'PassiveDataKit')
+project(':PassiveDataKit').projectDir = new File(settingsDir, 'PassiveDataKit-Android')

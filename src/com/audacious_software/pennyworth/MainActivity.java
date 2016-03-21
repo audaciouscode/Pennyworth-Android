@@ -1,9 +1,10 @@
 package com.audacious_software.pennyworth;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity
+import com.audacious_software.passive_data_kit.activities.PdkActivity;
+
+public class MainActivity extends PdkActivity
 {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
