@@ -3,6 +3,7 @@
     package="com.audacious_software.pennyworth"
     android:versionCode="1"
     android:versionName="1.0" >
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <uses-sdk
         android:minSdkVersion="14"

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pennyworth</string>
+
+    <string name="action_diagnostics">Diagnostics</string>
 </resources>
