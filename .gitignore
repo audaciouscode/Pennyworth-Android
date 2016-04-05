@@ -33,3 +33,5 @@ captures/
 
 .idea/
 *.iml
+
+res/values/keys.xml
