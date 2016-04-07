@@ -6,4 +6,7 @@
     <item android:id="@+id/action_diagnostics"
         android:title="@string/action_diagnostics"
         app:showAsAction="never" />
+    <item android:id="@+id/action_transmit_data"
+        android:title="@string/action_transmit_data"
+        app:showAsAction="never" />
 </menu>

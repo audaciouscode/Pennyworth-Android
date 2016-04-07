@@ -3,4 +3,5 @@
 
     <string name="action_diagnostics">Diagnostics</string>
     <string name="action_data_stream">Data Stream</string>
+    <string name="action_transmit_data">Transmit Data</string>
 </resources>
