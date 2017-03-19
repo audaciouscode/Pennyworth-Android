@@ -13,6 +13,7 @@ import com.audacious_software.passive_data_kit.activities.DiagnosticsActivity;
 import com.audacious_software.passive_data_kit.activities.DataStreamActivity;
 import com.audacious_software.passive_data_kit.activities.PdkActivity;
 import com.audacious_software.passive_data_kit.generators.Generators;
+import com.audacious_software.passive_data_kit.generators.wearables.WithingsDevice;
 import com.audacious_software.passive_data_kit.transmitters.HttpTransmitter;
 
 import net.hockeyapp.android.CrashManager;
@@ -28,14 +29,19 @@ public class MainActivity extends PdkActivity
 
         this.setContentView(R.layout.activity_main);
 
+        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CONSUMER_KEY, this.getString(R.string.withings_api_key));
+        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CONSUMER_SECRET, this.getString(R.string.withings_api_secret));
+        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CALLBACK_URL, "pdk://pennyworth/oauth/withings");
+//        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CALLBACK_URL, "https://pennyworthproject.org/foo");
+
         PassiveDataKit.getInstance(this).start();
 
-        Generators.getInstance(this).addNewDataPointListener(new Generators.NewDataPointListener() {
-            @Override
-            public void onNewDataPoint(String identifier, Bundle data) {
-                Log.e("Pennyworth", "DATA[" + identifier + "] = " + data.toString());
-            }
-        });
+//        Generators.getInstance(this).addNewDataPointListener(new Generators.NewDataPointListener() {
+//            @Override
+//            public void onNewDataPoint(String identifier, Bundle data) {
+//                Log.e("Pennyworth", "DATA[" + identifier + "] = " + data.toString());
+//            }
+//        });
 
         CrashManager.register(this, this.getString(R.string.hockeyapp_api_key));
 

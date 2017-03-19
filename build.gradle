@@ -2,10 +2,13 @@ apply plugin: 'com.android.application'
 buildscript {
     repositories {
         jcenter()
+        flatDir {
+            dirs 'libs'
+        }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }
 
@@ -13,12 +16,15 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     sourceSets {
         main {
@@ -31,14 +37,14 @@ android {
 
     dependencies {
         compile fileTree(dir: 'libs', include: ['*.jar'])
-        compile 'com.android.support:appcompat-v7:25.0.0'
+        compile 'com.android.support:appcompat-v7:25.3.0'
         compile 'net.hockeyapp.android:HockeySDK:3.7.2'
         compile project(':PassiveDataKit')
     }
 
     defaultConfig {
         applicationId "com.audacious_software.pennyworth"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -54,4 +60,7 @@ android {
 
 dependencies {
     compile project(':PassiveDataKit')
+//    compile project(':libraries-base')
+//    compile project(':libraries-common')
+//    compile project(':libraries-controller')
 }
