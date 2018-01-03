@@ -11,7 +11,7 @@ env:
 
 before_script:
   - git submodule update --init --recursive
-  - cp empty.properties gradle.properties
+  - cp app/src/main/res/values/keys.xml-template app/src/main/res/values/keys.xml
   - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
 
