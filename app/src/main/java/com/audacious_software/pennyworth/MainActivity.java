@@ -1,10 +1,7 @@
 package com.audacious_software.pennyworth;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +9,6 @@ import com.audacious_software.passive_data_kit.PassiveDataKit;
 import com.audacious_software.passive_data_kit.activities.DiagnosticsActivity;
 import com.audacious_software.passive_data_kit.activities.DataStreamActivity;
 import com.audacious_software.passive_data_kit.activities.PdkActivity;
-import com.audacious_software.passive_data_kit.generators.Generators;
 import com.audacious_software.passive_data_kit.generators.wearables.WithingsDevice;
 import com.audacious_software.passive_data_kit.transmitters.HttpTransmitter;
 
