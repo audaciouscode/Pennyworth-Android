@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_api_key">AIzaSyD8uZU0ivJ5aIcWRLqYPNtbmok5mwClzgE</string>
+    <string name="hockeyapp_api_key">6e8cd8fdf1fc4eacb89b5be1ea04f3d9</string>
+    <string name="withings_api_key">8cbe774c24517c7350d213889c95f87c80657c323f3f7d595b229048b8585</string>
+    <string name="withings_api_secret">00ffc0739ccd8f7798e073437f079bcef005d83e5ce28c0c2c415de9373b</string>
+</resources>

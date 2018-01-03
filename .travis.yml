@@ -1,0 +1,62 @@
+sudo: true
+language: android
+jdk: oraclejdk8
+
+git:
+  submodules: false
+
+env:
+  matrix:
+    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
+
+before_script:
+  - git submodule update --init --recursive
+  - cp empty.properties gradle.properties
+  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
+
+before_install:
+  - wget http://services.gradle.org/distributions/gradle-4.1-bin.zip
+  - unzip gradle-4.1-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-4.1
+  - export PATH=$GRADLE_HOME/bin:$PATH
+  - ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk -a --no-ui --filter tool,platform-tool,build-tools-27.0.0,sys-img-armeabi-v7a-android-24
+  - android list targets
+  - yes | sdkmanager "platforms;android-27"
+  - yes | sdkmanager "build-tools;27.0.2"
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+script:
+  # - android-wait-for-emulator
+  - adb devices
+  - mv app/src/main/res/values/keys.xml-template app/src/main/res/values/keys.xml
+  - gradle testDebugUnitTest
+  # - gradle connectedAndroidTest
+  - gradle lint
+  - gradle assembleDebug
+
+android:
+  components:
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-27
+
+    # The SDK version used to compile your project
+    - android-24
+    - android-27
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-27
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    - sys-img-armeabi-v7a-android-24
+    # - sys-img-x86-android-23
+
