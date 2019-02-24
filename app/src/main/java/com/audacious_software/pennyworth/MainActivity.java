@@ -2,61 +2,73 @@ package com.audacious_software.pennyworth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.audacious_software.passive_data_kit.PassiveDataKit;
 import com.audacious_software.passive_data_kit.activities.DiagnosticsActivity;
 import com.audacious_software.passive_data_kit.activities.DataStreamActivity;
-import com.audacious_software.passive_data_kit.activities.PdkActivity;
-import com.audacious_software.passive_data_kit.generators.wearables.WithingsDevice;
-import com.audacious_software.passive_data_kit.transmitters.HttpTransmitter;
 
-import net.hockeyapp.android.CrashManager;
+public class MainActivity extends DataStreamActivity {
+    private Menu mMenu = null;
 
-import java.util.HashMap;
-
-public class MainActivity extends PdkActivity
-{
-    private HttpTransmitter mTransmitter;
+    protected int layoutResource() {
+        return R.layout.activity_main;
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.setContentView(R.layout.activity_main);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        this.setTitle(R.string.app_name);
 
-        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CONSUMER_KEY, this.getString(R.string.withings_api_key));
-        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CONSUMER_SECRET, this.getString(R.string.withings_api_secret));
-        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CALLBACK_URL, "pdk://pennyworth/oauth/withings");
-//        WithingsDevice.getInstance(this).setProperty(WithingsDevice.OPTION_OAUTH_CALLBACK_URL, "https://pennyworthproject.org/foo");
-
-        PassiveDataKit.getInstance(this).start();
-
-//        Generators.getInstance(this).addNewDataPointListener(new Generators.NewDataPointListener() {
-//            @Override
-//            public void onNewDataPoint(String identifier, Bundle data) {
-//                Log.e("Pennyworth", "DATA[" + identifier + "] = " + data.toString());
-//            }
-//        });
-
-        CrashManager.register(this, this.getString(R.string.hockeyapp_api_key));
-
-        this.mTransmitter = new HttpTransmitter();
-
-        HashMap<String, String> options = new HashMap<>();
-        options.put(HttpTransmitter.UPLOAD_URI, "http://pdk.audacious-software.com/data/add-bundle.json");
-        options.put(HttpTransmitter.USER_ID, "pennyworth-user");
-        options.put(HttpTransmitter.WIFI_ONLY, "false");
-        options.put(HttpTransmitter.CHARGING_ONLY, "false");
-        options.put(HttpTransmitter.USE_EXTERNAL_STORAGE, "true");
-
-        this.mTransmitter.initialize(this, options);
+        ScheduleManager.getInstance(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    protected void onResume() {
+        super.onResume();
+
+        final PennyworthApplication app = (PennyworthApplication) this.getApplication();
+        final MainActivity me = this;
+
+        String userId = app.getIdentifier();
+
+        if (userId != null) {
+            ScheduleManager.getInstance(this).updateSchedule(false, null, false);
+        } else {
+            app.promptForIdentifier(this, new Runnable() {
+                @Override
+                public void run() {
+                    Handler handler = new Handler(Looper.getMainLooper());
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (me.mMenu != null) {
+                                DiagnosticsActivity.setUpDiagnosticsItem(me, me.mMenu, true, true);
+                            }
+                        }
+                    }, 1000);
+
+                    ScheduleManager.getInstance(me).updateSchedule(true, null, false);
+                }
+            });
+        }
+
+        if (this.mMenu != null) {
+            DiagnosticsActivity.setUpDiagnosticsItem(this, this.mMenu, true, true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        DiagnosticsActivity.setUpDiagnosticsItem(this, menu, true, true);
+
+        this.mMenu = menu;
 
         return true;
     }
@@ -73,7 +85,7 @@ public class MainActivity extends PdkActivity
             this.startActivity(dataIntent);
         }
         else if (id == R.id.action_transmit_data) {
-            this.mTransmitter.transmit(true);
+            ScheduleManager.getInstance(this).transmitData();
         }
 
         return super.onOptionsItemSelected(item);

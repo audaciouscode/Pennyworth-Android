@@ -16,4 +16,11 @@
 #   public *;
 #}
 
+-dontobfuscate
+
 -keep class com.audacious_software.passive_data_kit.** { *; }
+-keep class com.github.mikephil.charting.** { *; }
+
+-dontwarn com.microsoft.band.**
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
+-dontwarn org.codehaus.mojo.**

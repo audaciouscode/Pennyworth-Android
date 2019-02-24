@@ -1,36 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.audacious_software.pennyworth">
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.audacious_software.pennyworth">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name=".PennyworthApplication" >
+        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_api_key" />
         <meta-data android:name="com.google.android.awareness.API_KEY" android:value="@string/google_api_key"/>
         <meta-data android:name="com.google.android.nearby.messages.API_KEY" android:value="@string/google_api_key" />
-       <activity
-            android:name="com.audacious_software.pennyworth.MainActivity"
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".activities.AppsUsedActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.audacious_software.passive_data_kit.activities.OAuthResponseActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
+        <receiver android:name=".BootReceiver">
             <intent-filter>
-                <data android:scheme="pdk" />
-                <data android:host="pennyworth"/>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
-        </activity>
+        </receiver>
+        <service android:enabled="true" android:name=".KeepAliveJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="false" />
+        <service android:enabled="true" android:name=".KeepAliveService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="false">
+            <intent-filter>
+                <action android:name="com.audacious_software.pennyworth.KeepAliveService.ACTION_KEEP_ALIVE" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>
