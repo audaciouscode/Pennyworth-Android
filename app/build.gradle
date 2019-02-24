@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        Pennyworth {
-            keyAlias 'pennyworth'
-            keyPassword 'W7hXG59BpsMFBHgU'
-            storeFile file('C:/Users/cjkarr/Documents/Keys/pennyworth.jks')
-            storePassword 'W7hXG59BpsMFBHgU'
-        }
-    }
     defaultConfig {
         applicationId "com.audacious_software.pennyworth"
         minSdkVersion 19
